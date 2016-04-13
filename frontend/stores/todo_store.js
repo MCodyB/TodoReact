@@ -26,8 +26,9 @@ var TodoStore = {
 
   fetch: function () {
     $.get("api/todos", "", function(todos) {
-      for (var i = todos.length - 1; i >= 0; i--) {
-        var todo = todos[i];
+      TodoStore._todos = {};
+      for (var i = todos[1].length - 1; i >= 0; i--) {
+        var todo = todos[1][i];
         TodoStore._todos[todo.id] = todo;
       }
     });
@@ -46,8 +47,8 @@ var TodoStore = {
           url: "api/todos/" + id,
           type: 'DELETE',
           success: function(todo) {
-            delete TodoStore._todos[todo.id];
-            TodoStore.changed()
+            delete TodoStore._todos[id];
+            TodoStore.changed();
           }
       });
     }
@@ -58,9 +59,10 @@ var TodoStore = {
       $.ajax({
         url: "api/todos/" + id,
         data: {todo: {done: !todo.done}},
-        type: 'DELETE',
+        type: 'PATCH',
         success: function(todo) {
-          TodoStore.changed()
+          TodoStore._todos[todo.id].done = todo.done;
+          TodoStore.changed();
         }
       });
     }

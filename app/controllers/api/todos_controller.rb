@@ -1,38 +1,38 @@
 class Api::TodosController < ApplicationController
-  before_action :set_todo, only: [:show, :destroy]
+  before_action :set_todo, only: [:show, :update, :destroy]
 
-  # GET /todos
-  # GET /todos.json
+  # GET /api/todos
+  # GET /api/todos.json
   def index
     @todos = Todo.all
-    render json: @todos
+    render json: [:api, @todos]
   end
 
-  # GET /todos/1
-  # GET /todos/1.json
+  # GET /api/todos/1
+  # GET /api/todos/1.json
   def show
   end
 
 
-  # POST /todos
-  # POST /todos.json
+  # POST /api/todos
+  # POST /api/todos.json
   def create
     respond_to do |format|
       if @todo = Todo.create!(todo_params)
-        format.json { render :show, status: :created, location: @todo }
+        format.json { render :show, status: :created, location: [:api, @todo] }
       else
         format.json { render json: @todo.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PATCH/PUT /todos/1
-  # PATCH/PUT /todos/1.json
+  # PATCH/PUT /api/todos/1
+  # PATCH/PUT /api/todos/1.json
   def update
     respond_to do |format|
       if @todo.update!(todo_params)
-        format.html { redirect_to @todo, notice: 'Todo was successfully updated.' }
-        format.json { render :show, status: :ok, location: @todo }
+        format.html { redirect_to [:api, @todo], notice: 'Todo was successfully updated.' }
+        format.json { render :show, status: :ok, location: [:api, @todo] }
       else
         format.html { render :edit }
         format.json { render json: @todo.errors, status: :unprocessable_entity }
@@ -40,12 +40,12 @@ class Api::TodosController < ApplicationController
     end
   end
 
-  # DELETE /todos/1
-  # DELETE /todos/1.json
+  # DELETE /api/todos/1
+  # DELETE /api/todos/1.json
   def destroy
-    @todo.destroy
+    @todo.destroy!
     respond_to do |format|
-      format.html { redirect_to todos_url, notice: 'Todo was successfully destroyed.' }
+      format.html { redirect_to api_todos_path, notice: 'Todo was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
