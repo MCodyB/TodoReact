@@ -31,14 +31,15 @@ var TodoStore = {
         var todo = todos[1][i];
         TodoStore._todos[todo.id] = todo;
       }
+      TodoStore.changed();
     });
   },
 
   create: function (todo) {
     $.post("api/todos", {todo: todo}, function(todo) {
       TodoStore._todos[todo.id] = todo;
+      TodoStore.changed();
     });
-    TodoStore.changed();
   },
 
   destroy: function (id) {
